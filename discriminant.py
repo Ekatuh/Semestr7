@@ -1,5 +1,6 @@
 def discriminant(a, b, c):
-    return b**2 - 4*a*c
+    """Вычисляет дискриминант квадратного уравнения."""
+    return b**2 - 4 * a * c
 
 
 if __name__ == "__main__":

@@ -63,7 +63,7 @@ jobs:
             STATUS="Пайплайн завершился с ошибкой!"
           fi
           
-          MESSAGE="🔔 GitHub Actions (${GITHUB_REPOSITORY})\n${STATUS}\n\nКоммит: ${GITHUB_SHA}\nАвтор: ${GITHUB_ACTOR}"
+          MESSAGE="${STATUS}"
           
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
