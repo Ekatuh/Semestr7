@@ -1,6 +1,8 @@
 def discriminant(a, b, c):
     #Вычисляет дискриминант квадратного уравнения.
     return b**2 - 4 * a * c
+
+
 if __name__ == "__main__":
     try:
         a = float(input("Введите коэффициент a: "))
