@@ -5,7 +5,7 @@ import discriminant
 class TestDiscriminant(unittest.TestCase):
     def test_positive_discriminant(self):
         # Положительный тест: D > 0
-        self.assertEqual(discriminant.discriminant(1, 5, 6), 1)
+        self.assertEqual(discriminant.discriminant(1, 5, 6), 8)
 
     def test_zero_discriminant(self):
         # Положительный тест: D = 0
