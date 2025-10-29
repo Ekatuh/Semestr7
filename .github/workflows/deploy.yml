@@ -4,34 +4,19 @@ on:
   release:
     types: [published]
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Create version folder
-        run: |
-          mkdir -p ./public/v${{ github.event.release.tag_name }}
-          cp -r *.html ./public/v${{ github.event.release.tag_name }}/
-          cp -r ru/ ./public/v${{ github.event.release.tag_name }}/ 2>/dev/null || true
-          cp -r en/ ./public/v${{ github.event.release.tag_name }}/ 2>/dev/null || true
-          ls -la ./public/v${{ github.event.release.tag_name }}/
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: ./public
-
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./
+          destination_dir: v${{ github.event.release.tag_name }}
+          keep_files: true
+          force_orphan: false
