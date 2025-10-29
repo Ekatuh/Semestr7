@@ -1,24 +1,36 @@
-name: Deploy to GitHub Pages
+name: Deploy Version to GitHub Pages
 
 on:
   release:
     types: [published]
 
-permissions:
-  contents: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout gh-pages
         uses: actions/checkout@v4
+        with:
+          ref: gh-pages
 
-      - name: Deploy to GitHub Pages
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          path: source-temp
+
+      - name: Copy version files
+        run: |
+          # Создаем папку для новой версии
+          mkdir -p v${{ github.event.release.tag_name }}
+          # Копируем файлы из релиза
+          cp -r source-temp/* v${{ github.event.release.tag_name }}/
+          # Убедимся что есть index.html
+          ls -la v${{ github.event.release.tag_name }}/
+
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: .
-          destination_dir: v${{ github.event.release.tag_name }}
+          force_orphan: false
