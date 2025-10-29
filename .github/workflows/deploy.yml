@@ -1,36 +1,37 @@
-name: Deploy Version to GitHub Pages
+name: Deploy Release Version
 
 on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout gh-pages
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: gh-pages
 
-      - name: Checkout source
-        uses: actions/checkout@v4
-        with:
-          path: source-temp
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
 
-      - name: Copy version files
+      - name: Create version folder
         run: |
-          # Создаем папку для новой версии
-          mkdir -p v${{ github.event.release.tag_name }}
-          # Копируем файлы из релиза
-          cp -r source-temp/* v${{ github.event.release.tag_name }}/
-          # Убедимся что есть index.html
-          ls -la v${{ github.event.release.tag_name }}/
+          mkdir -p ./public/v${{ github.event.release.tag_name }}
+          cp -r *.html ./public/v${{ github.event.release.tag_name }}/
+          cp -r ru/ ./public/v${{ github.event.release.tag_name }}/ 2>/dev/null || true
+          cp -r en/ ./public/v${{ github.event.release.tag_name }}/ 2>/dev/null || true
+          ls -la ./public/v${{ github.event.release.tag_name }}/
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: .
-          force_orphan: false
+          path: ./public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
