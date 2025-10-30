@@ -14,7 +14,6 @@ if __name__ == "__main__":
         else:
             D = discriminant(a, b, c)
             print(f"\nДискриминант D = {D}")
-
             if D > 0:
                 print("Уравнение имеет два действительных корня.")
             elif D == 0:
